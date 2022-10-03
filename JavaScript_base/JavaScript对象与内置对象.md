@@ -81,7 +81,7 @@ console.log(obj['sex']);
 obj.sayHi();
 ```
 
-### 3、利用[构造函数](https://so.csdn.net/so/search?q=构造函数&spm=1001.2101.3001.7020)创建对象🔥
+### 3、利用[构造函数](https://so.csdn.net/so/search?q=构造函数&spm=1001.2101.3001.7020)创建对象
 
 **构造函数** ：是一种特殊的函数，主要用来初始化对象，即为对象成员变量赋初始值，它总与 new 运算符一起使用。我们可以把对象中一些公共的属性和方法抽取出来，然后封装到这个函数里面。
 
@@ -181,6 +181,141 @@ console.log(obj.sex);
 for(var k in obj){
     console.log(k); // k 变量 输出得到的是属性名
     console.log(obj[k]); // obj[k] 得到的是属性值
+}
+```
+
+# 2.1、查文档
+
+学习一个内置对象的使用，只要学会其常用成员的使用即可，我们可以通过查文档学习，可以通过MDN/W3C来查询
+
+MDN: https://developer.mozilla.org/zh-CN/
+
+## 2.1.1、如何学习对象中的方法
+
+1. 查阅该方法的功能
+2. 查看里面参数的意义和类型
+3. 查看返回值的意义和类型
+4. 通过 demo 进行测试
+
+# 3、Math对象
+
+Math 对象不是构造函数，它具有数学常数和函数的属性和方法。跟数学相关的运算（求绝对值，取整、最大值等）可以使用 Math 中的成员。
+
+```javascript
+// Math数学对象，不是一个构造函数，所以我们不需要new 来调用，而是直接使用里面的属性和方法即可
+
+Math.PI		 			// 圆周率
+Math.floor() 	 		// 向下取整
+Math.ceil()             // 向上取整
+Math.round()            // 四舍五入版 就近取整   注意 -3.5   结果是  -3 
+Math.abs()		 		// 绝对值
+Math.max()/Math.min()	// 求最大和最小值
+```
+
+**注意**：上面的方法必须带括号
+
+```javascript
+console.log(Math.PI);  
+console.log(Math.max(1,99,3)); // 99
+```
+
+**练习：封装自己的数学对象**
+
+利用对象封装自己的数学对象，里面有PI 最大值 和最小值
+
+```javascript
+var myMath = {
+    PI: 3.141592653,
+    max: function() {
+        var max = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+            if (arguments[i] > max) {
+                max = arguments[i];
+            }
+        }
+        return max;
+    },
+    min: function() {
+        var min = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+            if (arguments[i] < min) {
+                min = arguments[i];
+            }
+        }
+        return min;
+    }
+}
+console.log(myMath.PI);
+console.log(myMath.max(1, 5, 9));
+console.log(myMath.min(1, 5, 9));
+```
+
+## 3.1、Math绝对值和三个取整方法
+
+- `Math.abs()` 取绝对值
+- 三个取整方法：
+  - `Math.floor()` : 向下取整
+  - `Math.ceil()` : 向上取整
+  - `Matg.round()` : 四舍五入，其他数字都是四舍五入，但是5特殊，它往大了取
+
+```javascript
+//1.绝对值方法
+console.log(Math.abs(1));  // 1
+console.log(Math.abs(-1)); // 1
+console.log(Math.abs('-1')); // 1 隐式转换，会把字符串 -1 转换为数字型
+//2.三个取整方法
+console.log(Math.floor(1.1)); // 1 向下取整，向最小的取值 floor-地板
+console.log(Math.floor(1.9)); //1
+
+console.log(Math.ceil(1.1)); //2 向上取整，向最大的取值 ceil-天花板
+console.log(Math.ceil(1.9)); //2 
+
+//四舍五入 其他数字都是四舍五入，但是5特殊，它往大了取
+
+console.log(Math.round(1.1)); //1 四舍五入
+console.log(Math.round(1.5)); //2
+console.log(Math.round(1.9)); //2
+console.log(Math.round(-1.1)); // -1
+console.log(Math.round(-1.5)); // -1
+```
+
+## 3.2、随机数方法random()
+
+- random() 方法可以随机返回一个小数，其取值范围是 [0，1)，左闭右开 0 <= x < 1
+- 得到一个两数之间的随机整数，包括第一个数，不包括第二个数
+
+```javascript
+// 得到两个数之间的随机整数，并且包含这两个整数
+function getRandom(min,max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+console.log(getRandom(1,10));
+```
+
+**1.随机点名**
+
+```javascript
+var arr = ['张三', '李四','王五','秦六']；
+console.log(arr[getRandom(0,arr.length - 1)]);
+```
+
+**2.猜数字游戏**
+
+```javascript
+function getRandom(min,max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+var random = getRandom(1,10);
+while(true) { //死循环 ，需要退出循环条件
+     var num = prompt('请输入1~10之间的一个整数:');
+     if(num > random) {
+         alert('你猜大了');
+     }else if (num < random) {
+         alert('你猜小了');
+     }else {
+         alert('你猜中了');
+         break; //退出整个循环
+     }
 }
 ```
 
