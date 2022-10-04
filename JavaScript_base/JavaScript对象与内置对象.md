@@ -319,3 +319,132 @@ while(true) { //死循环 ，需要退出循环条件
 }
 ```
 
+# 4、Data()日期对象
+
+- Date 对象和 Math 对象不一样，他是一个构造函数，所以我们需要实例化后才能使用
+- Date 实例用来处理日期和时间
+
+## 4.1、Date()方法的使用
+
+### 4.1.1、获取当前时间必须实例化
+
+```javascript
+var now = new Date();
+console.log(now);
+```
+
+### 4.1.2、Date()构造函数的参数
+
+如果括号里面有时间，就返回参数里面的时间。例如日期格式字符串为 `‘2019-5-1’`，可以写成`new Date('2019-5-1')` 或者 `new Date('2019/5/1')`
+
+- 如果Date()不写参数，就返回当前时间
+- 如果Date()里面写参数，就返回括号里面输入的时间
+
+```javascript
+// 1.如果没有参数，返回当前系统的当前时间
+var now = new Date();
+console.log(now);
+
+
+// 2.参数常用的写法 数字型 2019,10,1  字符串型 '2019-10-1 8:8:8' 时分秒
+// 如果Date()里面写参数，就返回括号里面输入的时间 
+var data = new Date(2019,10,1);
+console.log(data);  // 返回的是11月不是10月
+
+var data2 = new Date('2019-10-1 8:8:8');
+console.log(data2);
+```
+
+## 4.2、日期格式化
+
+我们想要 2019-8-8 8:8:8 格式的日期，要怎么办？
+
+需要获取日期指定的部分，所以我们要手动的得到这种格式
+
+| 方法名        | 说明                     | 代码               |
+| ------------- | ------------------------ | ------------------ |
+| getFullYear() | 获取当年                 | dObj.getFullYear() |
+| getMonth()    | 获取当月(0-11)           | dObj.getMonth()    |
+| getDate()     | 获取当天日期             | dObj.getDate()     |
+| getDay()      | 获取星期几(周日0到周六6) | dObj.getDay()      |
+| getHours()    | 获取当前小时             | dObj.getHours()    |
+| getMinutes()  | 获取当前小时             | dObj.getMinutes()  |
+| getSeconds()  | 获取当前秒钟             | dObj.gerSeconds()  |
+
+```javascript
+var date = new Date();
+console.log(date.getFullYear()); // 返回当前日期的年 2019
+console.log(date.getMonth() + 1);  //返回的月份小一个月 记得月份 +1
+console.log(date.getDate); //返回的是几号
+console.log(date.getDay());  //周一返回1 周6返回六 周日返回0
+
+
+
+// 写一个 2019年 5月 1日 星期三
+var date = new Date(); 
+var year =  date.getFullYear();
+var month = date.getMonth() + 1;
+var dates = date.getDate();
+console.log('今天是' + year +'年' + month + '月' + dates +'日' );
+
+// 封装一个函数返回当前的时分秒 格式 08:08:08
+function getTimer() {
+    var time = new Date();
+    var h = time.getHours();
+    h = h < 10 ? '0' + h : h;
+    var m = time.getMinutes();
+    m = m < 10 ? '0' + m : m;
+    var s = time.getSeconds();
+    s = s < 10 ? '0' + s : s;
+    return h + ':' + m + ':' + s;
+}
+console.log(getTimer());
+```
+
+## 4.3、获取日期的总的毫秒形式
+
+- `date.valueOf()` ：得到现在时间距离1970.1.1总的毫秒数
+- `date.getTime()` ：得到现在时间距离1970.1.1总的毫秒数
+
+```javascript
+// 获取Date总的毫秒数 不是当前时间的毫秒数 而是距离1970年1月1号过了多少毫秒数
+
+// 实例化Date对象
+var date = new Date();
+
+// 1 .通过 valueOf()  getTime() 用于获取对象的原始值
+console.log(date.valueOf());  //得到现在时间距离1970.1.1总的毫秒数
+console.log(date.getTime());
+
+// 2.简单的写法
+var date1 = +new Date();  // +new Date()返回的就是总的毫秒数，
+console.log(date1);
+
+// 3. HTML5中提供的方法 获得总的毫秒数 有兼容性问题
+console.log(Date.now());
+```
+
+**倒计时效果**
+
+```javascript
+function countDown(time) {
+    var nowTime = +new Date(); //没有参数，返回的是当前时间总的毫秒数
+    var inputTime = +new Date(time); // 有参数，返回的是用户输入时间的总毫秒数
+    var times = (inputTime - nowTime) / 1000; //times就是剩余时间的总的秒数
+
+    var d = parseInt(times / 60 / 60 / 24); //天数
+    d < 10 ? '0' + d : d;
+    var h = parseInt(times / 60 / 60 % 24); //小时
+    h < 10 ? '0' + h : h;
+    var m = parseInt(times / 60 % 60); //分
+    m < 10 ? '0' + m : m;
+    var s = parseInt(times % 60); //秒
+    s < 10 ? '0' + s : s;
+    return d + '天' + h + '时' + m + '分' + s + '秒';
+}
+console.log(countDown('2020-11-09 18:29:00'));
+var date = new Date;
+console.log(date); //现在时间
+```
+
+# 
