@@ -447,4 +447,97 @@ var date = new Date;
 console.log(date); //现在时间
 ```
 
-# 
+# 5、数组对象
+
+## 5.1、数组对象的创建
+
+创建数组对象的两种方式
+
+- 字面量方式
+- new Array()
+
+## 5.2、检测是否为数组
+
+- instanceof 运算符，可以判断一个对象是否属于某种类型
+- `Array.isArray()` 用于判断一个对象是否为数组，isArray() 是 HTML5 中提供的方法
+
+```javascript
+var arr = [1, 23];
+var obj = {};
+console.log(arr instanceof Array); // true
+console.log(obj instanceof Array); // false
+console.log(Array.isArray(arr));   // true
+console.log(Array.isArray(obj));   // false
+```
+
+## 5.3、添加删除数组元素
+
+| 方法名          | 说明                                                  | 返回值               |
+| --------------- | ----------------------------------------------------- | -------------------- |
+| push(参数1…)    | 末尾添加一个或多个元素，注意修改原数组                | 并返回新的长度       |
+| pop()           | 删除数组最后一个元素                                  | 返回它删除的元素的值 |
+| unshift(参数1…) | 向数组的开头添加一个或更多元素，注意修改原数组        | 并返回新的长度       |
+| shift()         | 删除数组的第一个元素，数组长度减1，无参数，修改原数组 | 并返回第一个元素     |
+
+```javascript
+// 1.push() 在我们数组的末尾，添加一个或者多个数组元素 push 推
+var arr = [1, 2, 3];
+arr.push(4, '秦晓');
+console.log(arr);
+console.log(arr.push(4, '秦晓'));
+console.log(arr);
+// push 完毕之后，返回结果是新数组的长度
+
+
+// 2. unshift 在我们数组的开头 添加一个或者多个数组元素
+arr.unshift('red');
+console.log(arr);
+
+// pop() 它可以删除数组的最后一个元素，一次只能删除一个元素
+arr.pop(); //不加参数
+// shift() 它剋删除数组的第一个元素,一次只能删除一个元素
+arr.shift(); //不加参数
+```
+
+**筛选数组**
+
+有一个包含工资的数组[1500,1200,2000,2100,1800],要求把数组中工资超过2000的删除，剩余的放到新数组里面
+
+```javascript
+var arr = [1500, 1200, 2000, 2100, 1800];
+var newArr = [];
+for (var i = 0; i < arr.length; i++) {
+    if (arr[i] < 2000) {
+        newArr.push(arr[i]);
+    }
+}
+console.log(newArr);
+```
+
+## 5.4、数组排序
+
+| 方法名    | 说明                         | 是否修改原数组                     |
+| --------- | ---------------------------- | ---------------------------------- |
+| reverse() | 颠倒数组中元素的顺序，无参数 | 该方法会改变原来的数组，返回新数组 |
+| sort()    | 对数组的元素进行排序         | 该方法会改变原来的数组，返回新数组 |
+
+```javascript
+// 1.翻转数组
+var arr = ['pink','red','blue'];
+arr.reverse();
+console.log(arr);
+
+// 2.数组排序(冒泡排序)
+var arr1 = [3,4,7,1];
+arr1.sort();
+console.log(arr1);
+
+// 对于双位数
+var arr = [1,64,9,61];
+arr.sort(function(a,b) {
+     return b - a;  //降序的排列
+     return a - b; //升序
+ 	}
+ )
+```
+
