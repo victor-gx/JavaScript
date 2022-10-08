@@ -688,3 +688,130 @@ while (index !== -1) {
 console.log('o出现的次数是: ' + num);
 ```
 
+## 6.4、根据位置返回字符
+
+| 方法名            | 说明                                     | 使用                        |
+| ----------------- | ---------------------------------------- | --------------------------- |
+| charAt(index)     | 返回指定位置的字符(index字符串的索引号)  | str.charAt(0)               |
+| charCodeAt(index) | 获取指定位置处字符的ASCII码(index索引号) | str.charCodeAt(0)           |
+| str[index]        | 获取指定位置处字符                       | HTML,IE8+支持和charAt()等效 |
+
+#### 返回字符位置
+
+判断一个字符串 “abcoefoxyozzopp” 中出现次数最多的字符，并统计其次数
+
+- 核心算法：利用 charAt() 遍历这个字符串
+- 把每个字符都存储给对象， 如果对象没有该属性，就为1，如果存在了就 +1
+- 遍历对象，得到最大值和该字符
+
+```javascript
+<script>
+    // 有一个对象 来判断是否有该属性 对象['属性名']
+    var o = {
+        age: 18
+    }
+    if (o['sex']) {
+        console.log('里面有该属性');
+
+    } else {
+        console.log('没有该属性');
+
+    }
+
+    //  判断一个字符串 'abcoefoxyozzopp' 中出现次数最多的字符，并统计其次数。
+    // o.a = 1
+    // o.b = 1
+    // o.c = 1
+    // o.o = 4
+    // 核心算法：利用 charAt() 遍历这个字符串
+    // 把每个字符都存储给对象， 如果对象没有该属性，就为1，如果存在了就 +1
+    // 遍历对象，得到最大值和该字符
+    var str = 'abcoefoxyozzopp';
+    var o = {};
+    for (var i = 0; i < str.length; i++) {
+        var chars = str.charAt(i); // chars 是 字符串的每一个字符
+        if (o[chars]) { // o[chars] 得到的是属性值
+            o[chars]++;
+        } else {
+            o[chars] = 1;
+        }
+    }
+    console.log(o);
+    // 2. 遍历对象
+    var max = 0;
+    var ch = '';
+    for (var k in o) {
+        // k 得到是 属性名
+        // o[k] 得到的是属性值
+        if (o[k] > max) {
+            max = o[k];
+            ch = k;
+        }
+    }
+    console.log(max);
+    console.log('最多的字符是' + ch);
+</script>
+
+```
+
+## 6.5、字符串操作方法
+
+| 方法名                  | 说明                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| concat(str1,str2,str3…) | concat() 方法用于连接两个或对各字符串。拼接字符串            |
+| substr(start,length)    | 从 start 位置开始(索引号), length 取的个数。                 |
+| slice(start,end)        | 从 start 位置开始，截取到 end 位置 ，end 取不到 (两个都是索引号) |
+| substring(start,end)    | 从 start 位置开始，截取到 end 位置 ，end 取不到 (基本和 slice 相同，但是不接受负) |
+
+```javascript
+// 1. concat('字符串1','字符串2'....)
+var str = 'andy';
+console.log(str.concat('red'));
+
+// 2. substr('截取的起始位置', '截取几个字符');
+var str1 = '改革春风吹满地';
+console.log(str1.substr(2, 2)); // 第一个2 是索引号的2   第二个2 是取几个字符
+```
+
+## 6.6、replace()方法
+
+replace() 方法用于在字符串中用一些字符替换另一些字符
+
+其使用格式：`replace(被替换的字符,要替换为的字符串)`
+
+```javascript
+// 1. 替换字符 replace('被替换的字符', '替换为的字符')  它只会替换第一个字符
+var str = 'andyandy';
+console.log(str.replace('a', 'b'));
+// 有一个字符串 'abcoefoxyozzopp'  要求把里面所有的 o 替换为 *
+var str1 = 'abcoefoxyozzopp';
+while (str1.indexOf('o') !== -1) {
+    str1 = str1.replace('o', '*');
+}
+console.log(str1);
+```
+
+## 6.7、split()方法
+
+split() 方法用于切分字符串，它可以将字符串切分为数组。在切分完毕之后，返回的是一个新数组。
+
+例如下面代码：
+
+```javascript
+var str = 'a,b,c,d';
+console.log(str.split(','));
+// 返回的是一个数组 ['a', 'b', 'c', 'd']
+```
+
+```javascript
+// 2. 字符转换为数组 split('分隔符')    前面我们学过 join 把数组转换为字符串
+var str2 = 'red, pink, blue';
+console.log(str2.split(','));
+var str3 = 'red&pink&blue';
+console.log(str3.split('&'));
+```
+
+## 6.8、大小写转换
+
+- `toUpperCase()` 转换大写
+- `toLowerCase()` 转换小写
