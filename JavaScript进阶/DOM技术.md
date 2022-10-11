@@ -116,3 +116,80 @@ ol.getElementsByTagName('li');
 </script>
 ```
 
+## 2.5、通过H5新增方法获取
+
+### 1. getElementsByClassName
+
+根据类名返回元素对象合集
+
+```javascript
+document.getElementsByClassName('类名'); 
+```
+
+### 2. document.querySelector
+
+根据指定选择器返回第一个元素对象
+
+```javascript
+document.querySelector('选择器');
+
+// 切记里面的选择器需要加符号 
+// 类选择器.box 
+// id选择器 #nav
+var firstBox = document.querySelector('.box');
+```
+
+### 3. document.querySelectorAll
+
+根据指定选择器返回所有元素对象
+
+```javascript
+document.querySelectorAll('选择器');
+```
+
+注意：
+
+```
+querySelector` 和 `querySelectorAll` 里面的选择器需要加符号,比如: `document.querySelector('#nav');
+```
+
+### 4. 例子
+
+```javascript
+<script>
+    // 1. getElementsByClassName 根据类名获得某些元素集合
+    var boxs = document.getElementsByClassName('box');
+    console.log(boxs);
+    // 2. querySelector 返回指定选择器的第一个元素对象  切记 里面的选择器需要加符号 .box  #nav
+    var firstBox = document.querySelector('.box');
+    console.log(firstBox);
+    var nav = document.querySelector('#nav');
+    console.log(nav);
+    var li = document.querySelector('li');
+    console.log(li);
+    // 3. querySelectorAll()返回指定选择器的所有元素对象集合
+    var allBox = document.querySelectorAll('.box');
+    console.log(allBox);
+    var lis = document.querySelectorAll('li');
+    console.log(lis);
+</script>
+```
+
+## 2.6、获取特殊元素
+
+### 1. 获取body元素
+
+返回body元素对象
+
+```javascript
+document.body;
+```
+
+### 2. 获取html元素
+
+返回html元素对象
+
+```javascript
+document.documentElement;
+```
+
