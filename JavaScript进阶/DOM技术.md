@@ -193,5 +193,67 @@ document.body;
 document.documentElement;
 ```
 
+# 3、事件基础
 
+## 3.1、事件概述
+
+JavaScript 使我们有能力创建动态页面，而事件是可以被 JavaScript 侦测到的行为。
+
+简单理解： 触发— 响应机制。
+
+网页中的每个元素都可以产生某些可以触发 JavaScript 的事件，例如，我们可以在用户点击某按钮时产生一个事件，然后去执行某些操作。
+
+## 3.2、事件三要素
+
+1. 事件源(谁)
+2. 事件类型(什么事件)
+3. 事件处理程序(做啥)
+
+```javascript
+<script>
+    // 点击一个按钮，弹出对话框
+    // 1. 事件是有三部分组成  事件源  事件类型  事件处理程序   我们也称为事件三要素
+    //(1) 事件源 事件被触发的对象   谁  按钮
+    var btn = document.getElementById('btn');
+    //(2) 事件类型  如何触发 什么事件 比如鼠标点击(onclick) 还是鼠标经过 还是键盘按下
+    //(3) 事件处理程序  通过一个函数赋值的方式 完成
+    btn.onclick = function() {
+        alert('点秋香');
+    }
+</script>
+```
+
+## 3.3、执行事件的步骤
+
+1. 获取事件源
+2. 注册事件(绑定事件)
+3. 添加事件处理程序(采取函数赋值形式)
+
+```javascript
+<script>
+    // 执行事件步骤
+    // 点击div 控制台输出 我被选中了
+    // 1. 获取事件源
+    var div = document.querySelector('div');
+    // 2.绑定事件 注册事件
+    // div.onclick 
+    // 3.添加事件处理程序 
+    div.onclick = function() {
+        console.log('我被选中了');
+    }
+</script>
+```
+
+## 3.4、鼠标事件
+
+| 鼠标事件    | 触发条件         |
+| ----------- | ---------------- |
+| onclick     | 鼠标点击左键触发 |
+| onmouseover | 鼠标经过触发     |
+| onmouseout  | 鼠标离开触发     |
+| onfocus     | 获得鼠标焦点触发 |
+| onblur      | 失去鼠标焦点触发 |
+| onmousemove | 鼠标移动触发     |
+| onmouseup   | 鼠标弹起触发     |
+| onmousedown | 鼠标按下触发     |
 
