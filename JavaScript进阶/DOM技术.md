@@ -257,3 +257,110 @@ JavaScript 使我们有能力创建动态页面，而事件是可以被 JavaScri
 | onmouseup   | 鼠标弹起触发     |
 | onmousedown | 鼠标按下触发     |
 
+# 4、操作元素
+
+JavaScript 的 DOM 操作可以改变网页内容、结构和样式，我们可以利用 DOM 操作元素来改变元素里面的内容 、属性等。注意以下都是属性
+
+## 4.1、改变元素内容
+
+从起始位置到终止位置的内容，但它去除html标签，同时空格和换行也会去掉。
+
+```javascript
+element.innerText
+```
+
+起始位置到终止位置的全部内容，包括HTML标签，同时保留空格和换行
+
+```javascript
+element.innerHTML
+```
+
+```javascript
+<body>
+    <div></div>
+    <p>
+        我是文字
+        <span>123</span>
+    </p>
+
+    <script>
+        // innerText 和 innerHTML的区别 
+        // 1. innerText 不识别html标签,去除空格和换行
+        var div = document.querySelector('div');
+        div.innerText = '<strong>今天是：</strong> 2019';
+        // 2. innerHTML 识别html标签 保留空格和换行的
+        div.innerHTML = '<strong>今天是：</strong> 2019';
+        // 这两个属性是可读写的  可以获取元素里面的内容
+        var p = document.querySelector('p');
+        console.log(p.innerText);
+        console.log(p.innerHTML);
+    </script>
+</body>
+```
+
+![f3394f40561e45c299c09d7bbecdb513](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101908534.png)
+
+## 4.2、改变元素属性
+
+```javascript
+// img.属性
+img.src = "xxx";
+
+input.value = "xxx";
+input.type = "xxx";
+input.checked = "xxx";
+input.selected = true / false;
+input.disabled = true / false;
+```
+
+## 4.3、改变样式属性
+
+我们可以通过 JS 修改元素的大小、颜色、位置等样式。
+
+- 行内样式操作
+
+```javascript
+// element.style
+div.style.backgroundColor = 'pink';
+div.style.width = '250px';
+```
+
+- 类名样式操作
+
+```javascript
+// element.className
+```
+
+注意：
+
+1. JS里面的样式采取驼峰命名法，比如 fontSize ，backgroundColor
+2. JS 修改 style 样式操作 ，产生的是行内样式，CSS权重比较高
+3. 如果样式修改较多，可以采取操作类名方式更改元素样式
+4. class 因为是个保留字，因此使用`className`来操作元素类名属性
+5. className 会直接更改元素的类名，会覆盖原先的类名
+
+```javascript
+<body>
+    <div class="first">文本</div>
+    <script>
+        // 1. 使用 element.style 获得修改元素样式  如果样式比较少 或者 功能简单的情况下使用
+        var test = document.querySelector('div');
+        test.onclick = function() {
+            // this.style.backgroundColor = 'purple';
+            // this.style.color = '#fff';
+            // this.style.fontSize = '25px';
+            // this.style.marginTop = '100px';
+            // 让我们当前元素的类名改为了 change
+
+            // 2. 我们可以通过 修改元素的className更改元素的样式 适合于样式较多或者功能复杂的情况
+            // 3. 如果想要保留原先的类名，我们可以这么做 多类名选择器
+            // this.className = 'change';
+            this.className = 'first change';
+        }
+    </script>
+</body>
+```
+
+## 4.4、总结
+
+![image-20221010191125086](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101911145.png)
