@@ -505,3 +505,217 @@ div.setAttribute('data-index',1);
 </body>
 ```
 
+# 5、节点操作
+
+获取元素通常使用两种方式：
+
+| 1.利用DOM提供的方法获取元素     | 2.利用节点层级关系获取元素 |
+| ------------------------------- | -------------------------- |
+| document.getElementById()       | 利用父子兄节点关系获取元素 |
+| document.getElementsByTagName() | 逻辑性强，但是兼容性较差   |
+| document.querySelector 等       |                            |
+| 逻辑性不强，繁琐                |                            |
+
+这两种方式都可以获取元素节点，我们后面都会使用，但是节点操作更简单
+
+一般的，节点至少拥有三个基本属性
+
+## 5.1、节点概述
+
+网页中的所有内容都是节点（标签、属性、文本、注释等），在DOM 中，节点使用 node 来表示。
+
+HTML DOM 树中的所有节点均可通过 JavaScript 进行访问，所有 HTML 元素（节点）均可被修改，也可以创建或删除。
+
+一般的，节点至少拥有nodeType（节点类型）、nodeName（节点名称）和nodeValue（节点值）这三个基本属性。
+
+- 元素节点：nodeType 为1
+- 属性节点：nodeType 为2
+- 文本节点：nodeType 为3(文本节点包括文字、空格、换行等)
+
+我们在实际开发中，节点操作主要操作的是**元素节点**
+
+利用 DOM 树可以把节点划分为不同的层级关系，常见的是**父子兄层级关系**。
+
+## 5.2、父级节点
+
+```javascript
+node.parentNode
+```
+
+- `parentNode`属性可以返回某节点的父结点，注意是最近的一个父结点
+- 如果指定的节点没有父结点则返回null
+
+```javascript
+<body>
+    <!-- 节点的优点 -->
+    <div>我是div</div>
+    <span>我是span</span>
+    <ul>
+        <li>我是li</li>
+        <li>我是li</li>
+        <li>我是li</li>
+        <li>我是li</li>
+    </ul>
+    <div class="demo">
+        <div class="box">
+            <span class="erweima">×</span>
+        </div>
+    </div>
+
+    <script>
+        // 1. 父节点 parentNode
+        var erweima = document.querySelector('.erweima');
+        // var box = document.querySelector('.box');
+        // 得到的是离元素最近的父级节点(亲爸爸) 如果找不到父节点就返回为 null
+        console.log(erweima.parentNode);
+    </script>
+</body>
+```
+
+## 5.3、子结点
+
+```javascript
+parentNode.childNodes(标准)
+```
+
+- `parentNode.childNodes` 返回包含指定节点的子节点的集合，该集合为即时更新的集合
+- 返回值包含了所有的子结点，包括元素节点，文本节点等
+- 如果只想要获得里面的元素节点，则需要专门处理。所以我们一般不提倡使用`childNodes`
+
+```javascript
+parentNode.children(非标准)
+```
+
+- `parentNode.children` 是一个只读属性，返回所有的子元素节点
+- 它只返回子元素节点，其余节点不返回 （**这个是我们重点掌握的**）
+- 虽然 children 是一个非标准，但是得到了各个浏览器的支持，因此我们可以放心使用
+
+```javascript
+<body>
+    <ul>
+        <li>我是li</li>
+        <li>我是li</li>
+        <li>我是li</li>
+        <li>我是li</li>
+    </ul>
+    <ol>
+        <li>我是li</li>
+        <li>我是li</li>
+        <li>我是li</li>
+        <li>我是li</li>
+    </ol>
+    <script>
+        // DOM 提供的方法（API）获取
+        var ul = document.querySelector('ul');
+        var lis = ul.querySelectorAll('li');
+        // 1. 子节点  childNodes 所有的子节点 包含 元素节点 文本节点等等
+        console.log(ul.childNodes);
+        console.log(ul.childNodes[0].nodeType);
+        console.log(ul.childNodes[1].nodeType);
+        // 2. children 获取所有的子元素节点 也是我们实际开发常用的
+        console.log(ul.children);
+    </script>
+</body>
+```
+
+### 5.3.1、第一个子结点
+
+```javascript
+parentNode.firstChild
+```
+
+- `firstChild` 返回第一个子节点，找不到则返回null
+- 同样，也是包含所有的节点
+
+### 5.3.2、最后一个子结点
+
+```javascript
+parentNode.lastChild
+```
+
+- `lastChild` 返回最后一个子节点，找不到则返回null
+- 同样，也是包含所有的节点
+
+```javascript
+<body>
+    <ol>
+        <li>我是li1</li>
+        <li>我是li2</li>
+        <li>我是li3</li>
+        <li>我是li4</li>
+        <li>我是li5</li>
+    </ol>
+    <script>
+        var ol = document.querySelector('ol');
+        // 1. firstChild 第一个子节点 不管是文本节点还是元素节点
+        console.log(ol.firstChild);
+        console.log(ol.lastChild);
+        // 2. firstElementChild 返回第一个子元素节点 ie9才支持
+        console.log(ol.firstElementChild);
+        console.log(ol.lastElementChild);
+        // 3. 实际开发的写法  既没有兼容性问题又返回第一个子元素
+        console.log(ol.children[0]);			//第一个子元素节点
+        console.log(ol.children[ol.children.length - 1]);//最后一个子元素节点
+    </script>
+</body>
+```
+
+![dde9c5a059d34c8da3641043a4ecb7df](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101918227.png)
+
+### 5.3.3、第一个子结点(兼容性)
+
+```javascript
+parentNode.firstElementChild
+```
+
+- `firstElementChild` 返回第一个子节点，找不到则返回null
+- 有兼容性问题，IE9以上才支持
+
+### 5.3.4、解决方案
+
+实际开发中，firstChild 和 lastChild 包含其他节点，操作不方便，而 firstElementChild 和 lastElementChild 又有兼容性问题，那么我们如何获取第一个子元素节点或最后一个子元素节点呢？
+
+解决方案
+
+- 如果想要第一个子元素节点，可以使用 `parentNode.chilren[0]`
+- 如果想要最后一个子元素节点，可以使用
+
+```javascript
+// 数组元素个数减1 就是最后一个元素的索引号
+parentNode.chilren[parentNode.chilren.length - 1]
+```
+
+- 示例：
+
+```javascript
+<body>
+    <ol>
+        <li>我是li1</li>
+        <li>我是li2</li>
+        <li>我是li3</li>
+        <li>我是li4</li>
+    </ol>
+    <script>
+        var ol = document.querySelector('ol');
+        // 1.firstChild 获取第一个子结点的，包含文本结点和元素结点
+        console.log(ol.firstChild);
+        // 返回的是文本结点 #text(第一个换行结点)
+        
+        console.log(ol.lastChild);
+        // 返回的是文本结点 #text(最后一个换行结点)
+        // 2. firstElementChild 返回第一个子元素结点
+        console.log(ol.firstElementChild);
+        // <li>我是li1</li>
+        
+        // 第2个方法有兼容性问题，需要IE9以上才支持
+        // 3.实际开发中，既没有兼容性问题，又返回第一个子元素
+        console.log(ol.children[0]);
+        // <li>我是li1</li>
+        console.log(ol.children[3]);
+        // <li>我是li4</li>
+        // 当里面li个数不唯一时候，需要取到最后一个结点时这么写
+        console.log(ol.children[ol.children.length - 1]);
+    </script>
+</body>
+```
+
