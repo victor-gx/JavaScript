@@ -719,3 +719,75 @@ parentNode.chilren[parentNode.chilren.length - 1]
 </body>
 ```
 
+## 5.4、兄弟节点
+
+### 5.4.1、下一个兄弟节点
+
+```javascript
+node.nextSibling
+```
+
+- `nextSibling` 返回当前元素的下一个兄弟元素节点，找不到则返回null
+- 同样，也是包含所有的节点
+
+### 5.4.2、上一个兄弟节点
+
+```javascript
+node.previousSibling
+```
+
+- `previousSibling` 返回当前元素上一个兄弟元素节点，找不到则返回null
+- 同样，也是包含所有的节点
+
+### 5.4.3、下一个兄弟节点(兼容性)
+
+```javascript
+node.nextElementSibling
+```
+
+- `nextElementSibling` 返回当前元素下一个兄弟元素节点，找不到则返回null
+- 有兼容性问题，IE9才支持
+
+### 5.4.4、上一个兄弟节点(兼容性)
+
+```javascript
+node.previousElementSibling
+```
+
+- `previousElementSibling` 返回当前元素上一个兄弟元素节点，找不到则返回null
+- 有兼容性问题，IE9才支持
+
+示例
+
+```javascript
+<body>
+    <div>我是div</div>
+    <span>我是span</span>
+    <script>
+        var div = document.querySelector('div');
+        // 1.nextSibling 下一个兄弟节点 包含元素节点或者 文本节点等等
+        console.log(div.nextSibling);		// #text
+        console.log(div.previousSibling);	// #text
+        // 2. nextElementSibling 得到下一个兄弟元素节点
+        console.log(div.nextElementSibling);	//<span>我是span</span>
+        console.log(div.previousElementSibling);//null
+    </script>
+</body>
+```
+
+**如何解决兼容性问题 ？**
+
+答：自己封装一个兼容性的函数
+
+```javascript
+function getNextElementSibling(element) {
+    var el = element;
+    while(el = el.nextSibling) {
+        if(el.nodeType === 1){
+            return el;
+        }
+    }
+    return null;
+}
+```
+
