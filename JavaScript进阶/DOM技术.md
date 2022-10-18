@@ -791,3 +791,128 @@ function getNextElementSibling(element) {
 }
 ```
 
+## 5.5、创建节点
+
+```javascript
+document.createElement('tagName');
+```
+
+- `document.createElement()` 方法创建由 tagName 指定的HTML 元素
+- 因为这些元素原先不存在，是根据我们的需求动态生成的，所以我们也称为**动态创建元素节点**
+
+### 5.5.1、添加节点
+
+```javascript
+node.appendChild(child)
+```
+
+- `node.appendChild()` 方法将一个节点添加到指定父节点的子节点列表**末尾**。类似于 CSS 里面的 after 伪元素。
+
+```javascript
+node.insertBefore(child,指定元素)
+```
+
+- `node.insertBefore()` 方法将一个节点添加到父节点的指定子节点**前面**。类似于 CSS 里面的 before 伪元素。
+
+示例
+
+```javascript
+<body>
+    <ul>
+        <li>123</li>
+    </ul>
+    <script>
+        // 1. 创建节点元素节点
+        var li = document.createElement('li');
+        // 2. 添加节点 node.appendChild(child)  node 父级  child 是子级 后面追加元素  类似于数组中的push
+        // 先获取父亲ul
+        var ul = document.querySelector('ul');
+        ul.appendChild(li);
+        // 3. 添加节点 node.insertBefore(child, 指定元素);
+        var lili = document.createElement('li');
+        ul.insertBefore(lili, ul.children[0]);
+        // 4. 我们想要页面添加一个新的元素分两步: 1. 创建元素 2. 添加元素
+    </script>
+</body>
+```
+
+### 5.5.2、删除节点
+
+```javascript
+node.removeChild(child)
+```
+
+- `node.removeChild()`方法从 DOM 中删除一个子节点，返回删除的节点
+
+### 5.5.3、复制节点(克隆节点)
+
+```javascript
+node.cloneNode()
+```
+
+- `node.cloneNode()`方法返回调用该方法的节点的一个副本。 也称为克隆节点/拷贝节点
+- 如果括号参数为空或者为 false ，则是浅拷贝，即只克隆复制节点本身，不克隆里面的子节点
+- 如果括号参数为 true ，则是深度拷贝，会复制节点本身以及里面所有的子节点
+
+示例
+
+```javascript
+<body>
+    <ul>
+        <li>1111</li>
+        <li>2</li>
+        <li>3</li>
+    </ul>
+    <script>
+        var ul = document.querySelector('ul');
+        // 1. node.cloneNode(); 括号为空或者里面是false 浅拷贝 只复制标签不复制里面的内容
+        // 2. node.cloneNode(true); 括号为true 深拷贝 复制标签复制里面的内容
+        var lili = ul.children[0].cloneNode(true);
+        ul.appendChild(lili);
+    </script>
+</body>
+```
+
+### 5.5.4、面试题
+
+三种动态创建元素的区别
+
+- doucument.write()
+- element.innerHTML
+- document.createElement()
+
+区别：
+
+- `document.write()` 是直接将内容写入页面的内容流，但是文档流执行完毕，则它会导致页面全部重绘
+- `innerHTML` 是将内容写入某个 DOM 节点，不会导致页面全部重绘
+- `innerHTML` 创建多个元素效率更高（不要拼接字符串，采取数组形式拼接），结构稍微复杂
+
+```javascript
+<body>
+    <div class="innner"></div>
+    <div class="create"></div>
+    <script>
+        // 2. innerHTML 创建元素
+        var inner = document.querySelector('.inner');
+        // 2.1 innerHTML 用拼接字符串方法
+        for (var i = 0; i <= 100; i++) {
+            inner.innerHTML += '<a href="#">百度</a>';
+        }
+        // 2.2 innerHTML 用数组形式拼接
+        var arr = [];
+        for (var i = 0; i <= 100; i++) {
+            arr.push('<a href="#">百度</a>');
+        }
+        inner.innerHTML = arr.join('');
+
+        // 3.document.createElement() 创建元素
+        var create = document.querySelector('.create');
+        var a = document.createElement('a');
+        create.appendChild(a);
+    </script>
+</body>
+```
+
+- `createElement()`创建多个元素效率稍低一点点，但是结构更清晰
+
+> 总结：不同浏览器下， innerHTML 效率要比 createElement 高
