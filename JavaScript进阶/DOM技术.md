@@ -916,3 +916,55 @@ node.cloneNode()
 - `createElement()`创建多个元素效率稍低一点点，但是结构更清晰
 
 > 总结：不同浏览器下， innerHTML 效率要比 createElement 高
+
+# 6、DOM核心
+
+对于DOM操作，我们主要针对子元素的操作，主要有
+
+- 创建
+- 增
+- 删
+- 改
+- 查
+- 属性操作
+- 时间操作
+
+## 6.1、创建
+
+1. document.write
+2. innerHTML
+3. createElement
+
+## 6.2、增
+
+1. appendChild
+2. insertBefore
+
+## 6.3、删
+
+1. removeChild
+
+## 6.4、改
+
+- 主要修改dom的元素属性，dom元素的内容、属性、表单的值等
+
+1. 修改元素属性：src、href、title 等
+2. 修改普通元素内容：innerHTML、innerText
+3. 修改表单元素：value、type、disabled
+4. 修改元素样式：style、className
+
+## 6.5、查
+
+- 主要获取查询dom的元素
+
+1. **DOM提供的API方法**：getElementById、getElementsByTagName (古老用法，不推荐)
+2. **H5提供的新方法**：querySelector、querySelectorAll (提倡)
+3. 利用节点操作获取元素：父(parentNode)、子(children)、兄(previousElementSibling、nextElementSibling) 提倡
+
+## 6.6、属性操作
+
+- 主要针对于自定义属性
+
+1. setAttribute：设置dom的属性值
+2. getAttribute：得到dom的属性值
+3. removeAttribute：移除属性
