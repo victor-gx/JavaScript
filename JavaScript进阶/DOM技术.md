@@ -968,3 +968,98 @@ node.cloneNode()
 1. setAttribute：设置dom的属性值
 2. getAttribute：得到dom的属性值
 3. removeAttribute：移除属性
+
+# 7、事件高级
+
+## 7.1、注册事件(绑定事件)
+
+给元素添加事件，称为注册事件或者绑定事件。
+
+注册事件有两种方式：传统方式和方法监听注册方式
+
+| 传统注册方式                                                 | 方法监听注册方式                                      |
+| ------------------------------------------------------------ | ----------------------------------------------------- |
+| 利用 on 开头的事件 onclick                                   | w3c 标准推荐方式                                      |
+| `<button onclick = "alert("hi")"></button>`                  | addEventListener() 它是一个方法                       |
+| btn.onclick = function() {}                                  | IE9 之前的 IE 不支持此方法，可使用 attachEvent() 代替 |
+| 特点：注册事件的唯一性                                       | 特点：同一个元素同一个事件可以注册多个监听器          |
+| 同一个元素同一个事件只能设置一个处理函数，最后注册的处理函数将会覆盖前面注册的处理函数 | 按注册顺序依次执行                                    |
+
+### 1. addEventListener事件监听方式
+
+- `eventTarget.addEventListener()`方法将指定的监听器注册到 eventTarget（目标对象）上
+- 当该对象触发指定的事件时，就会执行事件处理函数
+
+```javascript
+eventTarget.addEventListener(type,listener[,useCapture])
+```
+
+该方法接收三个参数：
+
+- `type`:事件类型字符串，比如click,mouseover,注意这里不要带on
+- `listener`：事件处理函数，事件发生时，会调用该监听函数
+- `useCapture`：可选参数，是一个布尔值，默认是 false。学完 DOM 事件流后，我们再进一步学习
+
+```javascript
+<body>
+    <button>传统注册事件</button>
+    <button>方法监听注册事件</button>
+    <button>ie9 attachEvent</button>
+    <script>
+        var btns = document.querySelectorAll('button');
+        // 1. 传统方式注册事件
+        btns[0].onclick = function() {
+            alert('hi');
+        }
+        btns[0].onclick = function() {
+                alert('hao a u');
+            }
+            // 2. 事件监听注册事件 addEventListener 
+            // (1) 里面的事件类型是字符串 所以加引号 而且不带on
+            // (2) 同一个元素 同一个事件可以添加多个侦听器（事件处理程序）
+        btns[1].addEventListener('click', function() {
+            alert(22);
+        })
+        btns[1].addEventListener('click', function() {
+                alert(33);
+            })
+            // 3. attachEvent ie9以前的版本支持
+        btns[2].attachEvent('onclick', function() {
+            alert(11);
+        })
+    </script>
+</body>
+```
+
+### 2. attachEvent事件监听方式(兼容)
+
+- `eventTarget.attachEvent()`方法将指定的监听器注册到 eventTarget（目标对象） 上
+- 当该对象触发指定的事件时，指定的回调函数就会被执行
+
+```javascript
+eventTarget.attachEvent(eventNameWithOn,callback)
+```
+
+该方法接收两个参数：
+
+- `eventNameWithOn`：事件类型字符串，比如 onclick 、onmouseover ，这里要带 on
+- `callback`： 事件处理函数，当目标触发事件时回调函数被调用
+- ie9以前的版本支持
+
+### 3. 注册事件兼容性解决方案
+
+兼容性处理的原则：首先照顾大多数浏览器，再处理特殊浏览器
+
+```javascript
+function addEventListener(element, eventName, fn) {
+      // 判断当前浏览器是否支持 addEventListener 方法
+      if (element.addEventListener) {
+        element.addEventListener(eventName, fn);  // 第三个参数 默认是false
+      } else if (element.attachEvent) {
+        element.attachEvent('on' + eventName, fn);
+      } else {
+        // 相当于 element.onclick = fn;
+        element['on' + eventName] = fn;
+ } 
+```
+
