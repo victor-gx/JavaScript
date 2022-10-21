@@ -1063,3 +1063,81 @@ function addEventListener(element, eventName, fn) {
  } 
 ```
 
+## 7.2、删除事件(解绑事件)
+
+### 7.2.1、removeEventListener删除事件方式
+
+```javascript
+eventTarget.removeEventListener(type,listener[,useCapture]);
+```
+
+该方法接收三个参数：
+
+- `type`:事件类型字符串，比如click,mouseover,注意这里不要带on
+- `listener`：事件处理函数，事件发生时，会调用该监听函数
+- `useCapture`：可选参数，是一个布尔值，默认是 false。学完 DOM 事件流后，我们再进一步学习
+
+### 7.2.2、detachEvent删除事件方式(兼容)
+
+```javascript
+eventTarget.detachEvent(eventNameWithOn,callback);
+```
+
+该方法接收两个参数：
+
+- `eventNameWithOn`：事件类型字符串，比如 onclick 、onmouseover ，这里要带 on
+- `callback`： 事件处理函数，当目标触发事件时回调函数被调用
+- ie9以前的版本支持
+
+### 7.2.3、传统事件删除方式
+
+```javascript
+eventTarget.onclick = null;
+```
+
+事件删除示例：
+
+```javascript
+<body>
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <script>
+        var divs = document.querySelectorAll('div');
+        divs[0].onclick = function() {
+            alert(11);
+            // 1. 传统方式删除事件
+            divs[0].onclick = null;
+        }
+        // 2.removeEventListener 删除事件
+        divs[1].addEventListener('click',fn);   //里面的fn不需要调用加小括号
+
+        function fn(){
+            alert(22);
+            divs[1].removeEventListener('click',fn);
+        }
+        // 3.IE9 中的删除事件方式
+        divs[2].attachEvent('onclick',fn1);
+        function fn1() {
+            alert(33);
+            divs[2].detachEvent('onclick',fn1);
+        }
+    </script>
+
+</body>
+```
+
+### 7.2.4、删除事件兼容性解决方案
+
+```javascript
+function removeEventListener(element, eventName, fn) {
+      // 判断当前浏览器是否支持 removeEventListener 方法
+      if (element.removeEventListener) {
+        element.removeEventListener(eventName, fn);  // 第三个参数 默认是false
+      } else if (element.detachEvent) {
+        element.detachEvent('on' + eventName, fn);
+      } else {
+        element['on' + eventName] = null;
+ }
+```
+
