@@ -1141,3 +1141,99 @@ function removeEventListener(element, eventName, fn) {
  }
 ```
 
+## 7.3、DOM事件流
+
+- 事件流描述的是从页面中接收事件的顺序
+- 事件发生时会在元素节点之间按照特定的顺序传播，这个传播过程即DOM事件流
+
+![063297f2336f43dfb246930ae877a9ad](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101934149.png)
+
+- 事件冒泡： IE 最早提出，事件开始时由最具体的元素接收，然后逐级向上传播到到 DOM 最顶层节点的过程。
+- 事件捕获： 网景最早提出，由 DOM 最顶层节点开始，然后逐级向下传播到到最具体的元素接收的过程。
+
+**加深理解**：
+
+我们向水里面扔一块石头，首先它会有一个下降的过程，这个过程就可以理解为从最顶层向事件发生的最具体元素（目标点）的捕获过程；之后会产生泡泡，会在最低点（ 最具体元素）之后漂浮到水面上，这个过程相当于事件冒泡。
+
+![51f0146f0e334813b35d9b7075382a33](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101935892.png)
+
+### 7.3.1、捕获阶段
+
+- document -> html -> body -> father -> son
+
+两个盒子嵌套，一个父盒子一个子盒子，我们的需求是当点击父盒子时弹出 father ，当点击子盒子时弹出 son
+
+```javascript
+<body>
+    <div class="father">
+        <div class="son">son盒子</div>
+    </div>
+    <script>
+        // dom 事件流 三个阶段
+        // 1. JS 代码中只能执行捕获或者冒泡其中的一个阶段。
+        // 2. onclick 和 attachEvent（ie） 只能得到冒泡阶段。
+        // 3. 捕获阶段 如果addEventListener 第三个参数是 true 那么则处于捕获阶段  document -> html -> body -> father -> son
+        var son = document.querySelector('.son');
+        son.addEventListener('click', function() {
+             alert('son');
+        }, true);
+        var father = document.querySelector('.father');
+        father.addEventListener('click', function() {
+            alert('father');
+        }, true);
+    </script>
+</body>
+```
+
+但是因为DOM流的影响，我们点击子盒子，会先弹出 father，之后再弹出 son
+
+![65d6a7c8038f414fbf03c3ac4d2ce293](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101936881.gif)
+
+这是因为捕获阶段由 DOM 最顶层节点开始，然后逐级向下传播到到最具体的元素接收
+
+- document -> html -> body -> father -> son
+
+- 先看 document 的事件，没有；再看 html 的事件，没有；再看 body 的事件，没有；再看 father 的事件，有就先执行；再看 son 的事件，再执行。
+
+### 7.3.2、冒泡阶段
+
+- son -> father ->body -> html -> document
+
+```javascript
+<body>
+    <div class="father">
+        <div class="son">son盒子</div>
+    </div>
+    <script>
+		// 4. 冒泡阶段 如果addEventListener 第三个参数是 false 或者 省略 那么则处于冒泡阶段  son -> father ->body -> html -> document
+        var son = document.querySelector('.son');
+        son.addEventListener('click', function() {
+            alert('son');
+        }, false);
+        var father = document.querySelector('.father');
+        father.addEventListener('click', function() {
+            alert('father');
+        }, false);
+        document.addEventListener('click', function() {
+            alert('document');
+        })
+    </script>
+</body>
+```
+
+我们点击子盒子，会弹出 son、father、document
+
+![9ab4190f50d14c7aa879789476a394e9](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210101937367.gif)
+
+这是因为冒泡阶段开始时由最具体的元素接收，然后逐级向上传播到到 DOM 最顶层节点
+
+- son -> father ->body -> html -> document
+
+### 7.3.3、小结
+
+- JS 代码中只能执行捕获或者冒泡其中的一个阶段
+- `onclick` 和 `attachEvent`只能得到冒泡阶段
+- addEventListener(type,listener[,useCapture])第三个参数如果是 true，表示在事件捕获阶段调用事件处理程序；如果是 false (不写默认就是false),表示在事件冒泡阶段调用事件处理程序
+- 实际开发中我们很少使用事件捕获，我们更关注事件冒泡。
+
+- 有些事件是没有冒泡的，比如 onblur、onfocus、onmouseenter、onmouseleave
