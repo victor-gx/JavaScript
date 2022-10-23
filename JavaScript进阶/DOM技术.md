@@ -1237,3 +1237,134 @@ function removeEventListener(element, eventName, fn) {
 - 实际开发中我们很少使用事件捕获，我们更关注事件冒泡。
 
 - 有些事件是没有冒泡的，比如 onblur、onfocus、onmouseenter、onmouseleave
+
+## 7.4、事件对象
+
+```javascript
+eventTarget.onclick = function(event) {
+   // 这个 event 就是事件对象，我们还喜欢的写成 e 或者 evt 
+} 
+eventTarget.addEventListener('click', function(event) {
+   // 这个 event 就是事件对象，我们还喜欢的写成 e 或者 evt  
+})
+```
+
+- 官方解释：event 对象代表事件的状态，比如键盘按键的状态、鼠标的位置、鼠标按钮的状态
+- 简单理解：
+  - 事件发生后，跟事件相关的一系列信息数据的集合都放到这个对象里面
+  - 这个对象就是事件对象 event，它有很多属性和方法，比如
+    - 谁绑定了这个事件
+    - 鼠标触发事件的话，会得到鼠标的相关信息，如鼠标位置
+    - 键盘触发事件的话，会得到键盘的相关信息，如按了哪个键
+
+- 这个 event 是个形参，系统帮我们设定为事件对象，不需要传递实参过去
+- 当我们注册事件时， event 对象就会被系统自动创建，并依次传递给事件监听器（事件处理函数）
+
+```javascript
+<body>
+    <div>123</div>
+    <script>
+        // 事件对象
+        var div = document.querySelector('div');
+        div.onclick = function(e) {
+                // console.log(e);
+                // console.log(window.event);
+                // e = e || window.event;
+                console.log(e);
+
+
+            }
+        // 1. event 就是一个事件对象 写到我们侦听函数的 小括号里面 当形参来看
+        // 2. 事件对象只有有了事件才会存在，它是系统给我们自动创建的，不需要我们传递参数
+        // 3. 事件对象 是 我们事件的一系列相关数据的集合 跟事件相关的 比如鼠标点击里面就包含了鼠标的相关信息，鼠标坐标啊，如果是键盘事件里面就包含的键盘事件的信息 比如 判断用户按下了那个键
+        // 4. 这个事件对象我们可以自己命名 比如 event 、 evt、 e
+        // 5. 事件对象也有兼容性问题 ie678 通过 window.event 兼容性的写法  e = e || window.event;
+    </script>
+</body>
+```
+
+### 7.4.1、事件对象的兼容性方案
+
+事件对象本身的获取存在兼容问题：
+
+1. 标准浏览器中是浏览器给方法传递的参数，只需要定义形参 e 就可以获取到。
+2. 在 IE6~8 中，浏览器不会给方法传递参数，如果需要的话，需要到 window.event 中获取查找
+
+解决：
+
+```javascript
+e = e || window.event;
+```
+
+```javascript
+<body>
+    <div>123</div>
+    <script>
+        // 事件对象
+        var div = document.querySelector('div');
+        div.onclick = function(e) {
+                // e = e || window.event;
+                console.log(e);
+				// 事件对象也有兼容性问题 ie678 通过 window.event 兼容性的写法  e = e || window.event;
+
+            }
+</body>
+```
+
+### 7.4.2、事件对象的常见属性和方法
+
+| 事件对象属性方法    | 说明                                          |
+| ------------------- | --------------------------------------------- |
+| e.target            | 返回触发事件的对象 标准                       |
+| e.srcElement        | 返回触发事件的对象 非标准 ie6-8使用           |
+| e.type              | 返回事件的类型 比如`click` `mouseover` 不带on |
+| e.cancelBubble      | 该属性阻止冒泡，非标准，ie6-8使用             |
+| e.returnValue       | 该属性阻止默认行为 非标准，ie6-8使用          |
+| e.preventDefault()  | 该方法阻止默认行为 标准 比如不让链接跳转      |
+| e.stopPropagation() | 阻止冒泡 标准                                 |
+
+e.target 和 this 的区别：
+
+- this 是事件绑定的元素， 这个函数的调用者（绑定这个事件的元素）
+- e.target 是事件触发的元素。
+
+```javascript
+<body>
+    <div>123</div>
+    <ul>
+        <li>abc</li>
+        <li>abc</li>
+        <li>abc</li>
+    </ul>
+    <script>
+        // 常见事件对象的属性和方法
+        // 1. e.target 返回的是触发事件的对象（元素）  this 返回的是绑定事件的对象（元素）
+        // 区别 ： e.target 点击了那个元素，就返回那个元素 this 那个元素绑定了这个点击事件，那么就返回谁
+        var div = document.querySelector('div');
+        div.addEventListener('click', function(e) {
+            console.log(e.target);
+            console.log(this);
+
+        })
+        var ul = document.querySelector('ul');
+        ul.addEventListener('click', function(e) {
+                // 我们给ul 绑定了事件  那么this 就指向ul  
+                console.log(this);
+                console.log(e.currentTarget);
+
+                // e.target 指向我们点击的那个对象 谁触发了这个事件 我们点击的是li e.target 指向的就是li
+                console.log(e.target);
+
+            })
+            // 了解兼容性
+            // div.onclick = function(e) {
+            //     e = e || window.event;
+            //     var target = e.target || e.srcElement;
+            //     console.log(target);
+
+        // }
+        // 2. 了解 跟 this 有个非常相似的属性 currentTarget  ie678不认识
+    </script>
+</body>
+```
+
