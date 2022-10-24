@@ -1368,3 +1368,97 @@ e.target 和 this 的区别：
 </body>
 ```
 
+## 7.5、事件对象阻止默认行为
+
+```javascript
+<body>
+    <div>123</div>
+    <a href="http://www.baidu.com">百度</a>
+    <form action="http://www.baidu.com">
+        <input type="submit" value="提交" name="sub">
+    </form>
+    <script>
+        // 常见事件对象的属性和方法
+        // 1. 返回事件类型
+        var div = document.querySelector('div');
+        div.addEventListener('click', fn);
+        div.addEventListener('mouseover', fn);
+        div.addEventListener('mouseout', fn);
+
+        function fn(e) {
+            console.log(e.type);
+
+        }
+        // 2. 阻止默认行为（事件） 让链接不跳转 或者让提交按钮不提交
+        var a = document.querySelector('a');
+        a.addEventListener('click', function(e) {
+                e.preventDefault(); //  dom 标准写法
+            })
+            // 3. 传统的注册方式
+        a.onclick = function(e) {
+            // 普通浏览器 e.preventDefault();  方法
+            // e.preventDefault();
+            // 低版本浏览器 ie678  returnValue  属性
+            // e.returnValue;
+            // 我们可以利用return false 也能阻止默认行为 没有兼容性问题 特点： return 后面的代码不执行了， 而且只限于传统的注册方式
+            return false;
+            alert(11);
+        }
+    </script>
+</body>
+```
+
+## 7.6、阻止事件冒泡
+
+事件冒泡：开始时由最具体的元素接收，然后逐级向上传播到到 DOM 最顶层节点
+
+事件冒泡本身的特性，会带来的坏处，也会带来的好处，需要我们灵活掌握。
+
+- 标准写法
+
+```javascript
+e.stopPropagation();
+```
+
+- 非标准写法： IE6-8 利用对象事件 cancelBubble属性
+
+```javascript
+e.cancelBubble = true;
+```
+
+```javascript
+<body>
+    <div class="father">
+        <div class="son">son儿子</div>
+    </div>
+    <script>
+        // 常见事件对象的属性和方法
+        // 阻止冒泡  dom 推荐的标准 stopPropagation() 
+        var son = document.querySelector('.son');
+        son.addEventListener('click', function(e) {
+            alert('son');
+            e.stopPropagation(); // stop 停止  Propagation 传播
+            e.cancelBubble = true; // 非标准 cancel 取消 bubble 泡泡
+        }, false);
+
+        var father = document.querySelector('.father');
+        father.addEventListener('click', function() {
+            alert('father');
+        }, false);
+        document.addEventListener('click', function() {
+            alert('document');
+        })
+    </script>
+</body>
+```
+
+### 7.6.1、阻止事件冒泡的兼容性解决方案
+
+```javascript
+if(e && e.stopPropagation){
+      e.stopPropagation();
+  }else{
+      window.event.cancelBubble = true;
+  }
+```
+
