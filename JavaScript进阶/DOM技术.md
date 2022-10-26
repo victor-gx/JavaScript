@@ -1491,3 +1491,77 @@ if(e && e.stopPropagation){
 ```
 
 以上案例：给 ul 注册点击事件，然后利用事件对象的 target 来找到当前点击的 li，因为点击 li，事件会冒泡到 ul 上， ul 有注册事件，就会触发事件监听器。
+
+## 7.8、常见的鼠标事件
+
+| 鼠标事件    | 触发条件         |
+| ----------- | ---------------- |
+| onclick     | 鼠标点击左键触发 |
+| onmouseover | 鼠标经过触发     |
+| onmouseout  | 鼠标离开触发     |
+| onfocus     | 获得鼠标焦点触发 |
+| onblur      | 失去鼠标焦点触发 |
+| onmousemove | 鼠标移动触发     |
+| onmouseup   | 鼠标弹起触发     |
+| onmousedown | 鼠标按下触发     |
+
+### 7.8.1、禁止鼠标右键与鼠标选中
+
+- `contextmenu`主要控制应该何时显示上下文菜单，主要用于程序员取消默认的上下文菜单
+- `selectstart` 禁止鼠标选中
+
+```javascript
+<body>
+    <h1>我是一段不愿意分享的文字</h1>
+    <script>
+        // 1. contextmenu 我们可以禁用右键菜单
+        document.addEventListener('contextmenu', function(e) {
+                e.preventDefault(); // 阻止默认行为
+            })
+            // 2. 禁止选中文字 selectstart
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+
+        })
+    </script>
+</body>
+```
+
+### 7.8.2、鼠标事件对象
+
+- **event**对象代表事件的状态，跟事件相关的一系列信息的集合
+- 现阶段我们主要是用鼠标事件对象 **MouseEvent** 和键盘事件对象 **KeyboardEvent。**
+
+| 鼠标事件对象    | 说明                                      |
+| --------------- | ----------------------------------------- |
+| e.clientX       | 返回鼠标相对于浏览器窗口**可视区**的X坐标 |
+| e.clientY       | 返回鼠标相对于浏览器窗口**可视区**的Y坐标 |
+| e.pageX（重点） | 返回鼠标相对于文档页面的X坐标 IE9+ 支持   |
+| e.pageY（重点） | 返回鼠标相对于文档页面的Y坐标 IE9+ 支持   |
+| e.screenX       | 返回鼠标相对于电脑屏幕的X坐标             |
+| e.screenY       | 返回鼠标相对于电脑屏幕的Y坐标             |
+
+```javascript
+<body>
+    <script>
+        // 鼠标事件对象 MouseEvent
+        document.addEventListener('click', function(e) {
+            // 1. client 鼠标在可视区的x和y坐标
+            console.log(e.clientX);
+            console.log(e.clientY);
+            console.log('---------------------');
+
+            // 2. page 鼠标在页面文档的x和y坐标
+            console.log(e.pageX);
+            console.log(e.pageY);
+            console.log('---------------------');
+
+            // 3. screen 鼠标在电脑屏幕的x和y坐标
+            console.log(e.screenX);
+            console.log(e.screenY);
+
+        })
+    </script>
+</body>
+```
+
