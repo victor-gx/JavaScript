@@ -1565,3 +1565,74 @@ if(e && e.stopPropagation){
 </body>
 ```
 
+## 7.9、常用的键盘事件
+
+| 键盘事件   | 触发条件                                                     |
+| ---------- | ------------------------------------------------------------ |
+| onkeyup    | 某个键盘按键被松开时触发                                     |
+| onkeydown  | 某个键盘按键被按下时触发                                     |
+| onkeypress | 某个键盘按键被按下时触发，但是它不识别功能键，比如 ctrl shift 箭头等 |
+
+- **如果使用addEventListener 不需要加 on**
+- `onkeypress` 和前面2个的区别是，它不识别功能键，比如左右箭头，shift 等
+- 三个事件的执行顺序是： keydown – keypress — keyup
+
+```javascript
+<body>
+    <script>
+        // 常用的键盘事件
+        //1. keyup 按键弹起的时候触发 
+        // document.onkeyup = function() {
+        //         console.log('我弹起了');
+
+        //     }
+        document.addEventListener('keyup', function() {
+            console.log('我弹起了');
+        })
+
+        //3. keypress 按键按下的时候触发  不能识别功能键 比如 ctrl shift 左右箭头啊
+        document.addEventListener('keypress', function() {
+                console.log('我按下了press');
+            })
+            //2. keydown 按键按下的时候触发  能识别功能键 比如 ctrl shift 左右箭头啊
+        document.addEventListener('keydown', function() {
+                console.log('我按下了down');
+            })
+            // 4. 三个事件的执行顺序  keydown -- keypress -- keyup
+    </script>
+</body>
+```
+
+### 7.9.1、键盘对象属性
+
+| 键盘事件对象 **属性** | 说明                    |
+| --------------------- | ----------------------- |
+| keyCode               | 返回该**键**值的ASCII值 |
+
+- `onkeydown`和 `onkeyup` 不区分字母大小写，`onkeypress` 区分字母大小写。
+- 在我们实际开发中，我们更多的使用keydown和keyup， 它能识别所有的键（包括功能键）
+- `Keypress` 不识别功能键，但是`keyCode`属性能区分大小写，返回不同的ASCII值
+
+```javascript
+<body>
+    <script>
+        // 键盘事件对象中的keyCode属性可以得到相应键的ASCII码值
+        // 1. 我们的keyup 和keydown事件不区分字母大小写  a 和 A 得到的都是65
+        // 2. 我们的keypress 事件 区分字母大小写  a  97 和 A 得到的是65
+        document.addEventListener('keyup', function(e) {
+            console.log('up:' + e.keyCode);
+            // 我们可以利用keycode返回的ASCII码值来判断用户按下了那个键
+            if (e.keyCode === 65) {
+                alert('您按下的a键');
+            } else {
+                alert('您没有按下a键')
+            }
+
+        })
+        document.addEventListener('keypress', function(e) {
+            console.log('press:' + e.keyCode);
+        })
+    </script>
+</body>
+```
+
