@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded',function(){})
 - `load`等页面内容全部加载完毕，包括页面dom元素，图片，flash，css等
 - `DOMContentLoaded` 是DOM加载完毕，不包含图片 flash css 等就可以执行，加载速度比load更快一些
 
-```javascript
+```html
 <script>
     // window.onload = function() {
     //     var btn = document.querySelector('button');
@@ -123,7 +123,7 @@ window.addEventListener('resize',function(){});
 - 只要窗口大小发生像素变化，就会触发这个事件
 - 我们经常利用这个事件完成响应式布局。`window.innerWidth` 当前屏幕的宽度
 
-```javascript
+```html
 <body>
     <script>
         window.addEventListener('load', function() {
@@ -140,6 +140,202 @@ window.addEventListener('resize',function(){});
 
             })
         })
+    </script>
+</body>
+```
+
+# 3、定时器
+
+window 对象给我们提供了两个定时器
+
+- `setTimeout()`
+- `setInterval()`
+
+## 3.1、setTimeout()定时器
+
+`setTimeout()`方法用于设置一个定时器，该定时器在定时器到期后执行调用函数。
+
+```javascript
+window.setTimeout(调用函数,[延迟的毫秒数]);
+```
+
+**注意**：
+
+- `window`可以省略
+- 这个调用函数
+  - 可以直接写函数
+  - 或者写函数名
+  - 或者采取字符串 `函数名()` （不推荐）
+
+- 延迟的毫秒数省略默认是0，如果写，必须是毫秒
+- 因为定时器可能有很多，所以我们经常给定时器赋值一个标识符
+- `setTimeout()` 这个调用函数我们也称为**回调函数** callback
+- 普通函数是按照代码顺序直接调用，而这个函数，需要等待事件，事件到了才会去调用这个函数，因此称为回调函数。
+
+```html
+<body>
+    <script>
+        // 1. setTimeout 
+        // 语法规范：  window.setTimeout(调用函数, 延时时间);
+        // 1. 这个window在调用的时候可以省略
+        // 2. 这个延时时间单位是毫秒 但是可以省略，如果省略默认的是0
+        // 3. 这个调用函数可以直接写函数 还可以写 函数名 还有一个写法 '函数名()'
+        // 4. 页面中可能有很多的定时器，我们经常给定时器加标识符 （名字)
+        // setTimeout(function() {
+        //     console.log('时间到了');
+
+        // }, 2000);
+        function callback() {
+            console.log('爆炸了');
+
+        }
+        var timer1 = setTimeout(callback, 3000);
+        var timer2 = setTimeout(callback, 5000);
+        // setTimeout('callback()', 3000); // 我们不提倡这个写法
+    </script>
+</body>
+```
+
+## 3.2、clearTimeout()停止定时器
+
+- `clearTimeout()`方法取消了先前通过调用 `setTimeout()`建立的定时器
+
+```javascript
+window.clearTimeout(timeoutID)
+```
+
+**注意**：
+
+- `window`可以省略
+- 里面的参数就是定时器的标识符
+
+```html
+<body>
+    <button>点击停止定时器</button>
+    <script>
+        var btn = document.querySelector('button');
+        var timer = setTimeout(function() {
+            console.log('爆炸了');
+        }, 5000);
+        btn.addEventListener('click', function() {
+            clearTimeout(timer);
+        })
+    </script>
+</body>
+```
+
+## 3.3、setInterval()定时器
+
+- `setInterval()`方法重复调用一个函数，每隔这个时间，就去调用一次回调函数
+
+```javascript
+window.setInterval(回调函数,[间隔的毫秒数]);
+```
+
+- `window`可以省略
+- 这个回调函数:
+  - 可以直接写函数
+  - 或者写函数名
+  - 或者采取字符 `函数名()`
+
+- 第一次执行也是间隔毫秒数之后执行，之后每隔毫秒数就执行一次
+
+```html
+<body>
+    <script>
+        // 1. setInterval 
+        // 语法规范：  window.setInterval(调用函数, 延时时间);
+        setInterval(function() {
+            console.log('继续输出');
+
+        }, 1000);
+        // 2. setTimeout  延时时间到了，就去调用这个回调函数，只调用一次 就结束了这个定时器
+        // 3. setInterval  每隔这个延时时间，就去调用这个回调函数，会调用很多次，重复调用这个函数
+    </script>
+</body>
+```
+
+## 3.4、clearInterval()停止定时器
+
+- `clearInterval ( )` 方法取消了先前通过调用 `setInterval()` 建立的定时器
+
+**注意**：
+
+- `window`可以省略
+- 里面的参数就是定时器的标识符
+
+```html
+<body>
+    <button class="begin">开启定时器</button>
+    <button class="stop">停止定时器</button>
+    <script>
+        var begin = document.querySelector('.begin');
+        var stop = document.querySelector('.stop');
+        var timer = null; // 全局变量  null是一个空对象
+        begin.addEventListener('click', function() {
+            timer = setInterval(function() {
+                console.log('ni hao ma');
+
+            }, 1000);
+        })
+        stop.addEventListener('click', function() {
+            clearInterval(timer);
+        })
+    </script>
+</body>
+```
+
+## 3.5、this指向
+
+- `this`的指向在函数定义的时候是确定不了的，只有函数执行的时候才能确定`this`到底指向谁
+
+现阶段，我们先了解一下几个this指向
+
+- 全局作用域或者普通函数中`this`指向全局对象`window`(注意定时器里面的this指向window)
+- 方法调用中谁调用`this`指向谁
+- 构造函数中`this`指向构造函数实例
+
+```html
+<body>
+    <button>点击</button>
+    <script>
+        // this 指向问题 一般情况下this的最终指向的是那个调用它的对象
+
+        // 1. 全局作用域或者普通函数中this指向全局对象window（ 注意定时器里面的this指向window）
+        console.log(this);
+
+        function fn() {
+            console.log(this);
+
+        }
+        window.fn();
+        window.setTimeout(function() {
+            console.log(this);
+
+        }, 1000);
+        // 2. 方法调用中谁调用this指向谁
+        var o = {
+            sayHi: function() {
+                console.log(this); // this指向的是 o 这个对象
+
+            }
+        }
+        o.sayHi();
+        var btn = document.querySelector('button');
+        // btn.onclick = function() {
+        //     console.log(this); // this指向的是btn这个按钮对象
+
+        // }
+        btn.addEventListener('click', function() {
+                console.log(this); // this指向的是btn这个按钮对象
+
+            })
+            // 3. 构造函数中this指向构造函数的实例
+        function Fun() {
+            console.log(this); // this 指向的是fun 实例对象
+
+        }
+        var fun = new Fun();
     </script>
 </body>
 ```
