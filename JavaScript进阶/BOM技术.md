@@ -431,3 +431,123 @@ setTimeout(function() {
 ![eaabe7880146428fb68e6e64f23db40c](https://victor-gx.oss-cn-beijing.aliyuncs.com/img/2022/JavaScript/202210312200923.png)
 
 同步任务放在执行栈中执行，异步任务由异步进程处理放到任务队列中，执行栈中的任务执行完毕会去任务队列中查看是否有异步任务执行，由于主线程不断的重复获得任务、执行任务、再获取任务、再执行，所以这种机制被称为事件循环（ event loop）。
+
+# 5、location对象
+
+- window 对象给我们提供了一个 `location`属性用于获取或者设置窗体的url，并且可以解析url。因为这个属性返回的是一个对象，所以我们将这个属性也称为 location 对象。
+
+## 5.1、url
+
+统一资源定位符（uniform resouce locator）是互联网上标准资源的地址。互联网上的每个文件都有一个唯一的 URL，它包含的信息指出文件的位置以及浏览器应该怎么处理它。
+
+url 的一般语法格式为：
+
+```xml
+protocol://host[:port]/path/[?query]#fragment
+
+http://www.itcast.cn/index.html?name=andy&age=18#link
+```
+
+| 组成     | 说明                                     |
+| -------- | ---------------------------------------- |
+| protocol | 通信协议 常用的http,ftp,maito等          |
+| host     | 主机(域名) `www.itheima.com`             |
+| port     | 端口号，可选                             |
+| path     | 路径 由零或多个`'/'`符号隔开的字符串     |
+| query    | 参数 以键值对的形式，通过`&`符号分隔开来 |
+| fragment | 片段 `#`后面内容 常见于链接 锚点         |
+
+## 5.2、location对象属性
+
+| location对象属性  | 返回值                            |
+| ----------------- | --------------------------------- |
+| location.href     | 获取或者设置整个URL               |
+| location.host     | 返回主机（域名）`www.baidu.com`   |
+| location.port     | 返回端口号，如果未写返回空字符串  |
+| location.pathname | 返回路径                          |
+| location.search   | 返回参数                          |
+| location.hash     | 返回片段 #后面内容常见于链接 锚点 |
+
+重点记住： `href`和`search`
+
+需求：5s之后跳转页面
+
+```javascript
+<body>
+    <button>点击</button>
+    <div></div>
+    <script>
+        var btn = document.querySelector('button');
+        var div = document.querySelector('div');
+        var timer = 5;
+        setInterval(function() {
+            if (timer == 0) {
+                location.href = 'http://www.itcast.cn';
+            } else {
+                div.innerHTML = '您将在' + timer + '秒钟之后跳转到首页';
+                timer--;
+            }
+
+        }, 1000);
+    </script>
+</body>
+```
+
+## 5.3、location对象方法
+
+| location对象方法   | 返回值                                                       |
+| ------------------ | ------------------------------------------------------------ |
+| location.assign()  | 跟href一样，可以跳转页面（也称为重定向页面）                 |
+| location.replace() | 替换当前页面，因为不记录历史，所以不能后退页面               |
+| location.reload()  | 重新加载页面，相当于刷新按钮或者 f5 ，如果参数为true 强制刷新 ctrl+f5 |
+
+```javascript
+<body>
+    <button>点击</button>
+    <script>
+        var btn = document.querySelector('button');
+        btn.addEventListener('click', function() {
+            // 记录浏览历史，所以可以实现后退功能
+            // location.assign('http://www.itcast.cn');
+            // 不记录浏览历史，所以不可以实现后退功能
+            // location.replace('http://www.itcast.cn');
+            location.reload(true);
+        })
+    </script>
+</body>
+```
+
+## 5.4、获取URL参数
+
+我们简单写一个登录框，点击登录跳转到 index.html
+
+```javascript
+<body>
+    <form action="index.html">
+        用户名： <input type="text" name="uname">
+        <input type="submit" value="登录">
+    </form>
+</body>
+```
+
+接下来我们写 index.html
+
+```javascript
+<body>
+    <div></div>
+    <script>
+        console.log(location.search); // ?uname=andy
+        // 1.先去掉？  substr('起始的位置'，截取几个字符);
+        var params = location.search.substr(1); // uname=andy
+        console.log(params);
+        // 2. 利用=把字符串分割为数组 split('=');
+        var arr = params.split('=');
+        console.log(arr); // ["uname", "ANDY"]
+        var div = document.querySelector('div');
+        // 3.把数据写入div中
+        div.innerHTML = arr[1] + '欢迎您';
+    </script>
+</body>
+```
+
+这样我们就能获取到路径上的URL参数
