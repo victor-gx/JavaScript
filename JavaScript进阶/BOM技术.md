@@ -551,3 +551,44 @@ http://www.itcast.cn/index.html?name=andy&age=18#link
 ```
 
 这样我们就能获取到路径上的URL参数
+
+# 6、navigator对象
+
+- navigator 对象包含有关浏览器的信息，它有很多属性
+- 我们常用的是`userAgent`,该属性可以返回由客户机发送服务器的`user-agent`头部的值
+
+下面前端代码可以判断用户是用哪个终端打开页面的，如果是用 PC 打开的，我们就跳转到 PC 端的页面，如果是用手机打开的，就跳转到手机端页面
+
+```javascript
+if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+    window.location.href = "";     //手机
+ } else {
+    window.location.href = "";     //电脑
+ }
+```
+
+# 7、history对象
+
+- window 对象给我们提供了一个 history 对象，与浏览器历史记录进行交互
+- 该对象包含用户（在浏览器窗口中）访问过的 URL。
+
+| history对象方法 | 作用                                                         |
+| --------------- | ------------------------------------------------------------ |
+| back()          | 可以后退功能                                                 |
+| forward()       | 前进功能                                                     |
+| go(参数)        | 前进后退功能，参数如果是 1 前进1个页面 如果是 -1 后退1个页面 |
+
+```javascript
+<body>
+    <a href="list.html">点击我去往列表页</a>
+    <button>前进</button>
+    <script>
+        var btn = document.querySelector('button');
+        btn.addEventListener('click', function() {
+            // history.forward();
+            history.go(1);
+        })
+    </script>
+</body>
+```
+
