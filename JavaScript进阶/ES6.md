@@ -178,3 +178,188 @@ ES6 允许按照一定模式，从数组和对象中提取值，对变量进行�
 ```
 
 ==注意：频繁使用对象方法、数组元素，就可以使用解构赋值形式==
+
+## 模板字符串
+
+模板字符串（template string）是增强版的字符串，用反引号(`)标识，特点
+
+1. 字符串中可以出现换行符
+2. 可以使用 `${xxx} `形式输出变量  
+
+```html
+<body>
+    <script>
+        // ES6 引入新的声明字符串的方式 `` '' "" 
+        //1. 声明
+        // let str = `我也是一个字符串哦!`;
+        // console.log(str, typeof str);
+
+        //2. 内容中可以直接出现换行符
+        let str = `<ul>
+                    <li>沈腾</li>
+                    <li>玛丽</li>
+                    <li>魏翔</li>
+                    <li>艾伦</li>
+                    </ul>`;
+        //3. 变量拼接
+        let lovest = '魏翔';
+        let out = `${lovest}是我心目中最搞笑的演员!!`;
+        console.log(out);
+
+    </script>
+</body>
+```
+
+## 简化对象写法
+
+ ES6 允许在大括号里面，直接写入变量和函数，作为对象的属性和方法。这样的书写更加简洁。  
+
+```html
+<body>
+    <script>
+        //ES6 允许在大括号里面，直接写入变量和函数，作为对象的属性和方法。
+        //这样的书写更加简洁
+        let name = '尚硅谷';
+        let change = function(){
+            console.log('我们可以改变你!!');
+        }
+
+        const school = {
+            name,
+            change,
+            improve(){
+                console.log("我们可以提高你的技能");
+            }
+        }
+
+        console.log(school);
+
+    </script>
+</body>
+```
+
+==注意：对象简写形式简化了代码，所以以后用简写就对了==  
+
+## 箭头函数
+
+  ES6 允许使用`=>`定义函数。  
+
+  箭头函数的注意点:  
+
+1. 如果形参只有一个，则小括号可以省略
+2. 函数体如果只有一条语句，则花括号可以省略，函数的返回值为该条语句的执行结果  
+3. 箭头函数 this 指向声明时所在作用域下 `this` 的值
+4. 箭头函数不能作为构造函数实例化
+5. 不能使用 `arguments ` 
+
+```html
+<body>
+    <script>
+        // ES6 允许使用「箭头」（=>）定义函数。
+        //声明一个函数
+        // let fn = function(){
+
+        // }
+        // let fn = (a,b) => {
+        //     return a + b;
+        // }
+        //调用函数
+        // let result = fn(1, 2);
+        // console.log(result);
+
+
+        //1. this 是静态的. this 始终指向函数声明时所在作用域下的 this 的值
+        function getName(){
+            console.log(this.name);
+        }
+        let getName2 = () => {
+            console.log(this.name);
+        }
+
+        //设置 window 对象的 name 属性
+        window.name = '尚硅谷';
+        const school = {
+            name: "ATGUIGU"
+        }
+
+        //直接调用
+        // getName();
+        // getName2();
+
+        //call 方法调用
+        // getName.call(school);
+        // getName2.call(school);
+
+        //2. 不能作为构造实例化对象
+        // let Person = (name, age) => {
+        //     this.name = name;
+        //     this.age = age;
+        // }
+        // let me = new Person('xiao',30);
+        // console.log(me);
+
+        //3. 不能使用 arguments 变量
+        // let fn = () => {
+        //     console.log(arguments);
+        // }
+        // fn(1,2,3);
+
+        //4. 箭头函数的简写
+            //1) 省略小括号, 当形参有且只有一个的时候
+            // let add = n => {
+            //     return n + n;
+            // }
+            // console.log(add(9));
+            //2) 省略花括号, 当代码体只有一条语句的时候, 此时 return 必须省略
+            // 而且语句的执行结果就是函数的返回值
+            let pow = n => n * n;
+                
+            console.log(pow(8));
+
+    </script>
+</body>
+```
+
+ ==注意：箭头函数不会更改 **this** 指向，用来指定回调函数会非常合适==  
+
+```html
+<body>
+    <div id="ad"></div>
+    <script>
+        //需求-1  点击 div 2s 后颜色变成『粉色』
+        //获取元素
+        let ad = document.getElementById('ad');
+        //绑定事件
+        ad.addEventListener("click", function(){
+            //保存 this 的值
+            // let _this = this;
+            //定时器
+            setTimeout(() => {
+                //修改背景颜色 this
+                // console.log(this);
+                // _this.style.background = 'pink';
+                this.style.background = 'pink';
+            }, 2000);
+        });
+
+        //需求-2  从数组中返回偶数的元素
+        const arr = [1,6,9,10,100,25];
+        // const result = arr.filter(function(item){
+        //     if(item % 2 === 0){
+        //         return true;
+        //     }else{
+        //         return false;
+        //     }
+        // });
+        
+        const result = arr.filter(item => item % 2 === 0);
+
+        console.log(result);
+
+        // 箭头函数适合与 this 无关的回调. 定时器, 数组的方法回调
+        // 箭头函数不适合与 this 有关的回调.  事件回调, 对象的方法
+
+    </script>
+</body>
+
+```
