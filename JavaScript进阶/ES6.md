@@ -363,3 +363,121 @@ ES6 允许按照一定模式，从数组和对象中提取值，对变量进行�
 </body>
 
 ```
+
+## 参数默认值
+
+```html
+<body>
+    <script>
+        //ES6 允许给函数参数赋值初始值
+        //1. 形参初始值 具有默认值的参数, 一般位置要靠后(潜规则)
+        // function add(a,c=10,b) {
+        //     return a + b + c;
+        // }
+        // let result = add(1,2);
+        // console.log(result);
+
+        //2. 与解构赋值结合
+        function connect({host="127.0.0.1", username,password, port}){
+            console.log(host)
+            console.log(username)
+            console.log(password)
+            console.log(port)
+        }
+        connect({
+            host: 'atguigu.com',
+            username: 'root',
+            password: 'root',
+            port: 3306
+        })
+    </script>
+</body>
+```
+
+## rest 参数
+
+ES6 引入 `rest` 参数，用于获取函数的实参，用来代替 `arguments`  
+
+```html
+<body>
+    <script>
+        // ES6 引入 rest 参数，用于获取函数的实参，用来代替 arguments
+        // ES5 获取实参的方式
+        // function date(){
+        //     console.log(arguments);
+        // }
+        // date('白芷','阿娇','思慧');
+
+        // rest 参数
+        // function date(...args){
+        //     console.log(args);// filter some every map 
+        // }
+        // date('阿娇','柏芝','思慧');
+
+        // rest 参数必须要放到参数最后
+        // function fn(a,b,...args){
+        //     console.log(a);
+        //     console.log(b);
+        //     console.log(args);
+        // }
+        // fn(1,2,3,4,5,6);
+
+    </script>
+</body>
+```
+
+==注意：**rest** 参数非常适合不定个数参数函数的场景==  
+
+## spread 扩展运算符  
+
+扩展运算符（spread）也是三个点`...`。它好比`rest` 参数的逆运算，将一个数组转为用逗号分隔的参数序列，对数组进行解包。  
+
+```html
+<body>
+    <script>
+        // ... 扩展运算符能将『数组』转换为逗号分隔的参数序列
+        //声明一个数组 ...
+        const tfboys = ['易烊千玺','王源','王俊凯'];
+        // => '易烊千玺','王源','王俊凯'
+
+        // 声明一个函数
+        function chunwan(){
+            console.log(arguments);
+        }
+
+        chunwan(...tfboys);// chunwan('易烊千玺','王源','王俊凯')
+
+        
+
+    </script>
+</body>
+```
+
+应用
+
+```html
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <script>
+        //1. 数组的合并 情圣  误杀  唐探
+        // const kuaizi = ['王太利','肖央'];
+        // const fenghuang = ['曾毅','玲花'];
+        // // const zuixuanxiaopingguo = kuaizi.concat(fenghuang);
+        // const zuixuanxiaopingguo = [...kuaizi, ...fenghuang];
+        // console.log(zuixuanxiaopingguo);
+
+        //2. 数组的克隆
+        // const sanzhihua = ['E','G','M'];
+        // const sanyecao = [...sanzhihua];//  ['E','G','M']
+        // console.log(sanyecao);
+
+        //3. 将伪数组转为真正的数组
+        const divs = document.querySelectorAll('div');
+        const divArr = [...divs];
+        console.log(divArr);// arguments 
+    </script>
+</body>
+```
+
