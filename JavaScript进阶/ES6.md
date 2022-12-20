@@ -481,3 +481,218 @@ ES6 引入 `rest` 参数，用于获取函数的实参，用来代替 `arguments
 </body>
 ```
 
+## Symbol
+
+### Symbol 基本使用
+
+ES6 引入了一种新的原始数据类型 Symbol，表示独一无二的值。它是JavaScript 语言的第七种数据类型，是一种类似于字符串的数据类型。
+
+Symbol 特点  
+
+1. Symbol 的值是唯一的，用来解决命名冲突的问题
+2. Symbol 值不能与其他数据进行运算  
+3. Symbol 定 义 的 对 象 属 性 不 能 使 用 `for…in` 循 环 遍 历 ， 但 是 可 以 使 用  `Reflect.ownKeys` 来获取对象的所有键名  
+
+```html
+<body>
+    <script>
+        //创建Symbol
+        let s = Symbol();
+        // console.log(s, typeof s);
+        let s2 = Symbol('尚硅谷');
+        let s3 = Symbol('尚硅谷');
+        //Symbol.for 创建
+        let s4 = Symbol.for('尚硅谷');
+        let s5 = Symbol.for('尚硅谷');
+
+        //不能与其他数据进行运算
+        //    let result = s + 100;
+        //    let result = s > 100;
+        //    let result = s + s;
+
+        // USONB  you are so niubility 
+        // u  undefined
+        // s  string  symbol
+        // o  object
+        // n  null number
+        // b  boolean
+
+    </script>
+</body>
+```
+
+使用场景：
+
+```html
+<body>
+    <script>
+        //向对象中添加方法 up down
+        let game = {
+            name:'俄罗斯方块',
+            up: function(){},
+            down: function(){}
+        };
+        
+        //声明一个对象
+        // let methods = {
+        //     up: Symbol(),
+        //     down: Symbol()
+        // };
+
+        // game[methods.up] = function(){
+        //     console.log("我可以改变形状");
+        // }
+
+        // game[methods.down] = function(){
+        //     console.log("我可以快速下降!!");
+        // }
+
+        // console.log(game);
+
+        //
+        let youxi = {
+            name:"狼人杀",
+            [Symbol('say')]: function(){
+                console.log("我可以发言")
+            },
+            [Symbol('zibao')]: function(){
+                console.log('我可以自爆');
+            }
+        }
+
+        console.log(youxi)
+
+        
+    </script>
+</body>
+```
+
+==注**:**  遇到唯一性的场景时要想到 **Symbol**==  
+
+### Symbol 内置值
+
+除了定义自己使用的 Symbol 值以外，ES6 还提供了 11 个内置的 Symbol 值，  指向语言内部使用的方法。可以称这些方法为魔术方法，因为它们会在特定的场景下自动执行。 
+
+| Symbol 值                   | 功能                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| `Symbol.hasInstance`        | 当其他对象使用 `instanceof` 运算符，判断是否为该对象的实例时，会调用这个方法 |
+| `Symbol.isConcatSpreadable` | 对象的 `Symbol.isConcatSpreadable` 属性等于的是一个布尔值，表示该对象用于` Array.prototype.concat()`时，是否可以展开。 |
+| `Symbol.species`            | 创建衍生对象时，会使用该属性                                 |
+| `Symbol.match`              | 当执行 `str.match(myObject)` 时，如果该属性存在，会调用它，返回该方法的返回值。 |
+| `Symbol.replace`            | 当该对象被 `str.replace(myObject)`方法调用时，会返回该方法的返回值。 |
+| `Symbol.search`             | 当该对象被 `str. search (myObject)`方法调用时，会返回该方法的返回值。 |
+| `Symbol.split`              | 当该对象被 `str. split (myObject)`方法调用时，会返回该方法的返回值。 |
+| `Symbol.iterator`           | 对象进行 `for...of` 循环时，会调用 `Symbol.iterator` 方法，返回该对象的默认遍历器 |
+| `Symbol.toPrimitive`        | 该对象被转为原始类型的值时，会调用这个方法，返回该对象对应的原始类型值。 |
+| `Symbol. toStringTag  `     | 在该对象上面调用 `toString` 方法时，返回该方法的返回值       |
+| `Symbol. unscopables  `     | 该对象指定了使用` with` 关键字时，哪些属性会被 `with`环境排除。 |
+
+```html
+<body>
+    <script>
+        // class Person{
+        //     static [Symbol.hasInstance](param){
+        //         console.log(param);
+        //         console.log("我被用来检测类型了");
+        //         return false;
+        //     }
+        // }
+
+        // let o = {};
+
+        // console.log(o instanceof Person);
+
+        // const arr = [1,2,3];
+        // const arr2 = [4,5,6];
+        // arr2[Symbol.isConcatSpreadable] = false;
+        // console.log(arr.concat(arr2));
+    </script>
+</body>
+```
+
+## 迭代器
+
+迭代器（Iterator）就是一种机制。它是一种接口，为各种不同的数据结构提  供统一的访问机制。任何数据结构只要部署 Iterator 接口，就可以完成遍历操作。  
+
+1. ES6 创造了一种新的遍历命令 for...of 循环，Iterator 接口主要供 for...of 消费  
+2. 原生具备 iterator 接口的数据(可用  for of 遍历)  
+   - Array  
+   - Arguments  
+   - Set  
+   - Map  
+   - String  
+   - TypedArray  
+   - NodeList  
+
+3. 工作原理  
+   - 创建一个指针对象，指向当前数据结构的起始位置
+   - 第一次调用对象的 next 方法，指针自动指向数据结构的第一个成员
+   - 接下来不断调用 next 方法，指针一直往后移动，直到指向最后一个成员
+   - 每调用 next 方法返回一个包含 value 和 done 属性的对象  
+
+```html
+<body>
+    <script>
+        //声明一个数组
+        const xiyou = ['唐僧','孙悟空','猪八戒','沙僧'];
+
+        //使用 for...of 遍历数组
+        // for(let v of xiyou){
+        //     console.log(v);
+        // }
+
+        let iterator = xiyou[Symbol.iterator]();
+
+        //调用对象的next方法
+        console.log(iterator.next());
+        console.log(iterator.next());
+        console.log(iterator.next());
+        console.log(iterator.next());
+        console.log(iterator.next());
+    </script>
+</body>
+```
+
+==注:  需要自定义遍历数据的时候，要想到迭代器。==
+
+```html
+<body>
+    <script>
+        //声明一个对象
+        const banji = {
+            name: "终极一班",
+            stus: [
+                'xiaoming',
+                'xiaoning',
+                'xiaotian',
+                'knight'
+            ],
+            [Symbol.iterator]() {
+                //索引变量
+                let index = 0;
+                //
+                let _this = this;
+                return {
+                    next: function () {
+                        if (index < _this.stus.length) {
+                            const result = { value: _this.stus[index], done: false };
+                            //下标自增
+                            index++;
+                            //返回结果
+                            return result;
+                        }else{
+                            return {value: undefined, done: true};
+                        }
+                    }
+                };
+            }
+        }
+
+        //遍历这个对象 
+        for (let v of banji) {
+            console.log(v);
+        }
+    </script>
+</body>
+```
+
