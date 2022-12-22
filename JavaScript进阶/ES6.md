@@ -696,3 +696,164 @@ Symbol 特点
 </body>
 ```
 
+## 生成器
+
+生成器函数是 ES6 提供的一种异步编程解决方案，语法行为与传统函数完全不同  
+
+```html
+<body>
+    <script>    
+        //生成器其实就是一个特殊的函数
+        //异步编程  纯回调函数  node fs  ajax mongodb
+        //函数代码的分隔符
+        function * gen(){
+            // console.log(111);
+            yield '一只没有耳朵';
+            // console.log(222);
+            yield '一只没有尾部';
+            // console.log(333);
+            yield '真奇怪';
+            // console.log(444);
+        }
+
+        let iterator = gen();
+        console.log(iterator.next());
+        console.log(iterator.next());
+        console.log(iterator.next());
+        console.log(iterator.next());
+
+        //遍历
+        // for(let v of gen()){
+        //     console.log(v);
+        // }
+
+    </script>
+</body>
+```
+
+代码说明：  
+
+1. `*`的位置没有限制  
+2. 生成器函数返回的结果是迭代器对象，调用迭代器对象的 `next` 方法可以得到  `yield` 语句后的值  
+3. `yield` 相当于函数的暂停标记，也可以认为是函数的分隔符，每调用一次 `next`  方法，执行一段代码  
+4. `next` 方法可以传递实参，作为 `yield` 语句的返回值
+
+**生成器函数的参数传递**
+
+```html
+<body>
+    <script>
+        function * gen(arg){
+            console.log(arg);
+            let one = yield 111;
+            console.log(one);
+            let two = yield 222;
+            console.log(two);
+            let three = yield 333;
+            console.log(three);
+        }
+
+        //执行获取迭代器对象
+        let iterator = gen('AAA');
+        console.log(iterator.next());
+        //next方法可以传入实参
+        console.log(iterator.next('BBB'));
+        console.log(iterator.next('CCC'));
+        console.log(iterator.next('DDD'));
+        
+    </script>
+</body>
+```
+
+实例
+
+```html
+<body>
+    <script>
+        // 异步编程  文件操作 网络操作(ajax, request) 数据库操作
+        // 1s 后控制台输出 111  2s后输出 222  3s后输出 333 
+        // 回调地狱
+        // setTimeout(() => {
+        //     console.log(111);
+        //     setTimeout(() => {
+        //         console.log(222);
+        //         setTimeout(() => {
+        //             console.log(333);
+        //         }, 3000);
+        //     }, 2000);
+        // }, 1000);
+
+        function one(){
+            setTimeout(()=>{
+                console.log(111);
+                iterator.next();
+            },1000)
+        }
+
+        function two(){
+            setTimeout(()=>{
+                console.log(222);
+                iterator.next();
+            },2000)
+        }
+
+        function three(){
+            setTimeout(()=>{
+                console.log(333);
+                iterator.next();
+            },3000)
+        }
+
+        function * gen(){
+            yield one();
+            yield two();
+            yield three();
+        }
+
+        //调用生成器函数
+        let iterator = gen();
+        iterator.next();
+
+    </script>
+</body>
+```
+
+```html
+<body>
+    <script>
+        //模拟获取  用户数据  订单数据  商品数据 
+        function getUsers(){
+            setTimeout(()=>{
+                let data = '用户数据';
+                //调用 next 方法, 并且将数据传入
+                iterator.next(data);
+            }, 1000);
+        }
+
+        function getOrders(){
+            setTimeout(()=>{
+                let data = '订单数据';
+                iterator.next(data);
+            }, 1000)
+        }
+
+        function getGoods(){
+            setTimeout(()=>{
+                let data = '商品数据';
+                iterator.next(data);
+            }, 1000)
+        }
+
+        function * gen(){
+            let users = yield getUsers();
+            let orders = yield getOrders();
+            let goods = yield getGoods();
+        }
+
+        //调用生成器函数
+        let iterator = gen();
+        iterator.next();
+    </script>
+</body>
+```
+
