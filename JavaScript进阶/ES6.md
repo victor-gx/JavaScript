@@ -1109,3 +1109,62 @@ ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概�
 4. `super` 调用父级构造方法  
 5. `static` 定义静态方法和属性  
 6. 父类方法可以重写
+
+## 数值扩展
+
+### 二进制和八进制
+
+ES6 提供了二进制和八进制数值的新的写法，分别用前缀 `0b` 和 `0o` 表示。  
+
+### Number.isFinite() 与 Number.isNaN()  
+
+`Number.isFinite()` 用来检查一个数值是否为有限的
+
+`Number.isNaN()` 用来检查一个值是否为 `NaN ` 
+
+### Number.parseInt()与 Number.parseFloat()
+
+ES6 将全局方法 `parseInt` 和 `parseFloat`，移植到 `Number` 对象上面，使用不变。  
+
+### Math.trunc
+
+用于去除一个数的小数部分，返回整数部分。  
+
+### Number.isInteger
+
+`Number.isInteger()` 用来判断一个数值是否为整数  
+
+## 对象扩展
+
+ES6 新增了一些 Object 对象的方法  
+
+1. `Object.is` 比较两个值是否严格相等，与`===`行为基本一致（+0 与 NaN）
+2. `Object.assign` 对象的合并，将源对象的所有可枚举属性，复制到目标对象
+3. `__proto__`、`setPrototypeOf`、 `setPrototypeOf` 可以直接设置对象的原型  
+
+## 模块化
+
+模块化是指将一个大的程序文件，拆分成许多小的文件，然后将小文件组合起来。  
+
+### 模块化的好处
+
+模块化的优势有以下几点：
+
+1. 防止命名冲突
+2. 代码复用  
+3. 高维护性  
+
+### 模块化规范产品  
+
+ES6 之前的模块化规范有：  
+
+1. `CommonJS` => `NodeJS`、`Browserify`  
+2. `AMD`  => `requireJS`
+3. `CMD`=> `seaJS  `
+
+## **ES6** 模块化语法
+
+  模块功能主要由两个命令构成：`export` 和 `import`。
+
+- `export` 命令用于规定模块的对外接口  
+- `import` 命令用于输入其他模块提供的功能  
