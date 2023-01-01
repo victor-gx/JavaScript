@@ -1168,3 +1168,40 @@ ES6 之前的模块化规范有：
 
 - `export` 命令用于规定模块的对外接口  
 - `import` 命令用于输入其他模块提供的功能  
+
+# ECMASript 7 新特性
+
+## Array.prototype.includes
+
+`includes` 方法用来检测数组中是否包含某个元素，返回布尔类型值  
+
+## 指数操作符  
+
+在 ES7 中引入指数运算符`**`，用来实现幂运算，功能与 `Math.pow` 结果相同  
+
+# ECMASript 8新特性  
+
+## async和 await
+
+`async` 和 `await` 两种语法结合可以让异步代码像同步代码一样  
+
+### async函数
+
+1. `async` 函数的返回值为 `promise` 对象，  
+2. `promise` 对象的结果由 `async` 函数执行的返回值决定  
+
+### await表达式
+
+1. `await` 必须写在`async` 函数中
+2. `await` 右侧的表达式一般为 `promise` 对象  
+3. `await` 返回的是 `promise` 成功的值  
+4. `await` 的 `promise` 失败了, 就会抛出异常, 需要通过 `try...catch` 捕获处理  
+
+## Object.values 和 Object.entries
+
+1. `Object.values()`方法返回一个给定对象的所有可枚举属性值的数组  
+2. `Object.entries()`方法返回一个给定对象自身可遍历属性 `[key,value]` 的数组  
+
+## Object.getOwnPropertyDescriptors
+
+该方法返回指定对象所有自身属性的描述对象
